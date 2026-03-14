@@ -23,7 +23,17 @@ pipeline {
       }
     }
 
-    stage('Test') {
+    stage('Test (Desktop)') {
+      steps {
+        sh 'npm test'
+      }
+      post {
+        always {
+          archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
+        }
+      }
+    }
+    stage('Test (Mobile)') {
       steps {
         sh 'COTO_MOBILE=1 npm run test:mobile'
       }
