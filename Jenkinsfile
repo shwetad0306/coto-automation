@@ -8,6 +8,8 @@ pipeline {
   environment {
     NODE_ENV = 'test'
     PATH = "/opt/homebrew/bin:/usr/local/bin:/bin:/usr/bin"
+    COTO_BASE_URL = "https://coto.world"
+    ALERT_EMAIL = "panchrasshweta3@gmail.com"
   }
 
   stages {
@@ -25,9 +27,19 @@ pipeline {
 
     stage('Test (Desktop)') {
       steps {
-        sh 'npm test'
+        withCredentials([
+          string(credentialsId: 'coto_phone', variable: 'COTO_PHONE'),
+          string(credentialsId: 'coto_otp', variable: 'COTO_OTP')
+        ]) {
+          sh 'npm test'
+        }
       }
       post {
+        failure {
+          mail to: "${ALERT_EMAIL}",
+               subject: "Jenkins Playwright Desktop Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+               body: "Build failed. Check console output: ${env.BUILD_URL}"
+        }
         always {
           archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
         }
@@ -35,9 +47,19 @@ pipeline {
     }
     stage('Test (Mobile)') {
       steps {
-        sh 'COTO_MOBILE=1 npm run test:mobile'
+        withCredentials([
+          string(credentialsId: 'coto_phone', variable: 'COTO_PHONE'),
+          string(credentialsId: 'coto_otp', variable: 'COTO_OTP')
+        ]) {
+          sh 'COTO_MOBILE=1 npm run test:mobile'
+        }
       }
       post {
+        failure {
+          mail to: "${ALERT_EMAIL}",
+               subject: "Jenkins Playwright Mobile Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+               body: "Build failed. Check console output: ${env.BUILD_URL}"
+        }
         always {
           archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
         }
