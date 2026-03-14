@@ -7,6 +7,7 @@ pipeline {
 
   environment {
     NODE_ENV = 'test'
+    PATH = "/opt/homebrew/bin:/usr/local/bin:/bin:/usr/bin"
   }
 
   stages {
