@@ -1,0 +1,23 @@
+{
+  "name": "coto-automation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:report": "playwright show-report",
+    "test:mobile": "COTO_MOBILE=1 playwright test --project=mobile-chrome --project=mobile-safari",
+    "test:mobile:ui": "COTO_MOBILE=1 playwright test --ui --project=mobile-chrome --project=mobile-safari",
+    "setup": "npm ci && npx playwright install --with-deps",
+    "smoke": "playwright test tests/home.spec.ts tests/session.spec.ts tests/mobile.spec.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^25.5.0"
+  }
+}
