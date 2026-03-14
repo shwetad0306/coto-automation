@@ -25,7 +25,7 @@ pipeline {
 
     stage('Test') {
       steps {
-        sh 'npm test'
+        sh 'COTO_MOBILE=1 npm run test:mobile'
       }
       post {
         always {
